@@ -1,0 +1,57 @@
+package tester;
+
+import java.awt.Point;
+import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+
+public class Main {
+
+	static Mouse m = new Mouse (0, 0);
+	
+	public static void main(String[] args) {
+
+		/*for (int i   = 0; i < 100000; i ++ )   {      
+			m.pUpdate();
+			System.out.println(m.getX() +  " " + m.getY());                            
+                                                                                                                                                                                    
+		}*/
+		//m.delay(5000);
+		//m.MDK(380, 440, 5);
+		//m.delay(1000);
+		//m.MDK(380+110, 410+150, 5);
+		m.MDK(1250, 5, 5);
+		m.delay(1000);
+		m.MDK(640, 420, 5);  
+		m.delay(50);
+		m.MDK(800, 470, 5);
+		for (int i = 0; i <100000; i ++) {	
+			ArrayList <Point>coors = new ArrayList <Point>();
+			coors = m.search(400, 442, 100, 100, 10, 4, "0");
+			for (int j = 0; j < coors.size(); j++) {
+				m.MDK((int)coors.get(0).getX(), (int)coors.get(0).getY(), 5);
+			}
+			/*if (m.getColor(400, 432).equals("0")) {
+				m.MK(400, 432);
+			}
+			if (m.getColor(400, 442).equals("0")) {
+				m.MK(400, 442);
+			}
+			if (m.getColor(400, 452).equals("0")) {
+				m.MK(400, 452);
+			}
+			if (m.getColor(400, 462).equals("0")) {
+				m.MK(400, 462);
+			}*/
+			//if (i%120==0) {
+			//	count+=5;
+			//}
+			if (!m.getColor(394, 188).equals("cbd147")) {
+				m.delay(10);
+				m.key(KeyEvent.VK_SPACE);
+			}
+		}  
+
+  
+	}
+
+}
