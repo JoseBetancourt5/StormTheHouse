@@ -1,0 +1,153 @@
+package tester;
+
+import java.awt.AWTException;
+import java.awt.Color;
+import java.awt.MouseInfo;
+import java.awt.Point;
+import java.awt.Robot;
+//import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+
+public class Mouse {
+
+	private static int currentY;
+	private static int currentX;
+	private static Robot robot;
+	
+	public Mouse (int x, int y) {
+		currentX = x;
+		currentY = y;
+		try {
+			robot = new Robot();
+		} catch (AWTException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void moveTo (int finalX, int finalY) {
+		double tempX = currentX;
+		double tempY = currentY;
+		double ratio = ((double)finalY-currentY)/(finalX-currentX);
+		
+		if (finalY-currentY >= 0 && finalX-currentX >=0)
+			while (tempX < finalX && tempY < finalY) {
+				tempY += ratio*5;
+				tempX += 5;
+				robot.delay(8);
+				robot.mouseMove((int)tempX, (int)tempY);
+			}
+		else if (finalY-currentY >= 0 && finalX-currentX <=0)
+			while (tempX > finalX && tempY < finalY) {
+				tempY -= ratio*5;
+				tempX -= 5;
+				robot.delay(8);
+				robot.mouseMove((int)tempX, (int)tempY);
+			}
+		else if (finalY-currentY <= 0 && finalX-currentX <=0)
+			while (tempX > finalX && tempY > finalY) {
+				tempY -= ratio*5;
+				tempX -= 5;
+				robot.delay(8);
+				robot.mouseMove((int)tempX, (int)tempY);
+			}
+		else if (finalY-currentY <= 0 && finalX-currentX >=0)
+			while (tempX < finalX && tempY > finalY) {
+				tempY += ratio*5;
+				tempX += 5;
+				robot.delay(8);
+				robot.mouseMove((int)tempX, (int)tempY);
+			}
+	
+		currentX = MouseInfo.getPointerInfo().getLocation().x;
+		currentY = MouseInfo.getPointerInfo().getLocation().y;
+	}
+	
+	public void move (int x, int y) {
+		robot.mouseMove(x, y);
+		robot.delay(1);
+		currentX = x;
+		currentY = y;
+
+	}
+		public int getX () {
+			return currentX;
+		}
+	
+		public int getY () {
+			return currentY;
+		}
+		
+		
+		public void pUpdate () { 
+			currentX = MouseInfo.getPointerInfo().getLocation().x;
+			currentY = MouseInfo.getPointerInfo().getLocation().y;
+
+		}
+
+		public void setMouse ( int x, int y) {
+			currentX = x;
+			currentY = y;
+		}
+		
+		public void klick () {
+			robot.mousePress (MouseEvent.BUTTON1_MASK);
+			robot.mouseRelease (MouseEvent.BUTTON1_MASK);
+		}
+		
+		public void klickDown () {
+			robot.mousePress (MouseEvent.BUTTON1_MASK);
+		}
+		
+		public void klickUp () {
+			robot.mouseRelease (MouseEvent.BUTTON1_MASK);
+		}
+		
+		public void delay (int time) {
+			robot.delay(time);
+		}
+		
+		public String getColor (int x, int y) {
+			return Integer.toHexString(getIntColor(robot.getPixelColor(x, y)));
+		}
+		
+		public int getIntColor(Color c) {
+			return (c.getRed() << 16) | (c.getGreen() << 8) | c.getBlue();
+		}
+		
+		public void key (int i) {
+			robot.keyPress(i);
+			delay(5);
+			robot.keyRelease(i);
+		}
+		
+		 
+		public ArrayList<Point> search (int sX, int sY, int width, int height, int freqX, int freqY, String color) {
+			
+			ArrayList <Point> coors = new ArrayList <Point>();
+			
+			for (int y = sY; y <sY + height; y+=freqY) {
+				for (int x = sX; x <sX + width; x+=freqX) {
+					if (getColor(x,y).equals(color)) {
+						coors.add(new Point (x, y));
+						//System.out.println("1");
+					}
+				}
+			}
+			
+			return coors;
+		}
+	
+		public void MDK (int x, int y, int d) {
+			move (x, y);
+			delay (d);
+			klick();
+		}
+		
+		public void MK (int x, int y) {
+			move (x, y);
+			klick();
+		}
+		
+		
+}
